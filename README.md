@@ -1,4 +1,4 @@
-# Breakout
+# Chess
 Implementation of a small chess game in C++.
 
 This game was built using my game engine available
