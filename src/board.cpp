@@ -6,7 +6,7 @@
 constexpr double board_size = 13.4;
 constexpr double x_offset_ratio = double(2.01)/board_size;
 constexpr double y_offset_ratio = double(1.82)/board_size;
-constexpr double square_size_ratio = double(1.18)/board_size;
+constexpr double square_size_ratio = 1.0/8; //double(1.18)/board_size;
 
 Board::Board(int size)
 	: size(size), square_size(square_size_ratio*size),
@@ -14,7 +14,7 @@ Board::Board(int size)
 {
 	for (auto& p: pieces) p = nullptr;
 	pgl::loader::ResourceManager::load_texture(
-		"../resources/textures/board.png", true, "board"
+		"../resources/textures/board2.png", true, "board"
 	);
 }
 
@@ -27,8 +27,8 @@ void Board::draw(pgl::render2D::SpriteRenderer& renderer) {
 
 glm::vec2 Board::get_pos(const Position& pos) {
 	return glm::vec2(
-		offset.x + pos.w*square_size,
-		offset.y + pos.h*square_size
+		pos.x * square_size,
+		size - square_size - pos.y * square_size
 	);
 }
 
@@ -46,38 +46,28 @@ bool Board::in_board(int x, int y) {
 
 Position Board::get_pos(int x, int y) {
 	return {
-		(x - offset.x) / square_size,
-		(y - offset.y) / square_size
+		(int) x / square_size,
+		7 - (int) y / square_size
 	};
 }
 
 const Piece* Board::get_piece(const Position& pos) const {
-	if (pos.w < 0 || pos.w > 7 || pos.h < 0 || pos.h > 7)
+	if (pos.x < 0 || pos.x > 7 || pos.y < 0 || pos.y > 7)
 		return nullptr;
-	return pieces[pos.w + 8*pos.h];
+	return pieces[pos.x + 8*pos.y];
 }
 
 Piece* Board::get_piece(const Position& pos) {
-	return pieces[pos.w + 8*pos.h];
+	return pieces[pos.x + 8*pos.y];
 }
 
 void Board::set_piece(Piece* p, const Position& pos) {
-	pieces[pos.w + 8*pos.h] = p;
+	pieces[pos.x + 8*pos.y] = p;
 }
 
 void Board::move_piece(Piece* p, const Position& pos) {
 	Position previous = p->get_pos();
-	pieces[pos.w + 8*pos.h] = p;
-	pieces[previous.w + 8*previous.h] = nullptr;
-}
-
-bool Board::valid_move(const Position& pos, Team team) const {
-	if (pos.w < 0 || pos.h < 0 || pos.w > 7 || pos.h > 7)
-		return false;
-	if (get_piece(pos) == nullptr)
-		return true;
-	if (get_piece(pos)->same_team(team))
-		return false;
-
-	return true;
+	pieces[pos.x + 8*pos.y] = p;
+	pieces[previous.x + 8*previous.y] = nullptr;
+	p->set_pos(pos);
 }

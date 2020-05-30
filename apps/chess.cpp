@@ -6,9 +6,9 @@
 #include <iostream>
 
 // The Width of the screen
-const unsigned int SCREEN_WIDTH = 1400;
+const unsigned int SCREEN_WIDTH = 800;
 // The height of the screen
-const unsigned int SCREEN_HEIGHT = 1000;
+const unsigned int SCREEN_HEIGHT = 800;
 
 int main(int argc, char** argv) {
 	pgl::gui::GLFWWindow window = pgl::gui::GLFWWindow::make_window(SCREEN_WIDTH, SCREEN_HEIGHT, "Chess");

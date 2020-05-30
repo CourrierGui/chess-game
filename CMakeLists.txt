@@ -42,6 +42,7 @@ target_link_libraries(game-utils
 	PUBLIC
 		pangolin::pangolin
 		pangolin::pgl-gui
+		pangolin::pgl-tools
 		irrKlanglib
 )
 

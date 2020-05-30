@@ -22,5 +22,4 @@ class Board {
 		const Piece* get_piece(const Position& pos) const;
 		void set_piece(Piece* p, const Position& pos);
 		void move_piece(Piece* p, const Position& pos);
-		bool valid_move(const Position& pos, Team team) const;
 };
